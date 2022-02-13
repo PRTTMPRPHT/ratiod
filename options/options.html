@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!-- Options page for the Ratio'd chrome extension. -->
+<!-- TODO: This is a quick'n'dirty version, make this more user-friendly. -->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Ratio'd - Options</title>
+        <style>
+            html, body {
+                font-family: sans-serif;
+                padding: 0;
+                margin: 0;
+                background-color: #15202B;
+                color: white;
+            }
+            
+            body {
+                padding: 20px;
+            }
+
+            h1 {
+                margin-block-start: 0;
+            }
+
+            h2 {
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+            
+            h3 {
+                color: white;
+            }
+
+            .formula {
+                color: #AAAAAA;
+            }
+
+            .field-grid {
+                display: grid;
+                grid-template-columns: [labels] 200px [fields] 100px;
+                grid-auto-flow: row;
+                grid-row-gap: 5px;
+            }
+
+            .field-grid label {
+                grid-column: labels;
+                margin-top: auto;
+                margin-bottom: auto;
+            }
+
+            .field-grid input {
+                grid-column: fields;
+            }
+
+            .actions {
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Options</h1>
+        
+        <h2>General Behavior</h2>
+
+        <form>
+            <div>
+                <input type="radio" id="only-negative" name="behavior" value="NEGATIVE_ONLY">
+                <label for="only-negative">Show only negative ratios</label>
+            </div>
+            <div style="margin-top: 5px">
+                <input type="radio" id="both" name="behavior" value="BOTH">
+                <label for="both">Show both positive and negative ratios</label>
+            </div>
+        </form>
+
+        <h2>Mode</h2>
+        
+        <p>Controls the formula used for score calculation.</p>
+        
+        <form>
+            <div>
+                <input type="radio" id="richter" name="scoring" value="RICHTER">
+                <label for="richter">Ratio Richter <span class="formula">ln(replies / likes) * log(replies)</span></label>
+            </div>
+            <div style="margin-top: 5px">
+                <input type="radio" id="balanced" name="scoring" value="BALANCED">
+                <label for="balanced">Balanced Score <span class="formula">((retweets - replies) + 2 * (likes - replies)) / 3</span></label>
+            </div>
+        </form>
+
+        <h2>Thresholds</h2>
+        
+        <p>Values used to determine what to display when. Only change something here if you are sure what you are doing!</p>
+
+        <h3>Richter Mode</h3>
+        <div class="field-grid">
+            <label for="richter-threshold-positive">Positive:</label>
+            <input type="number" id="richter-threshold-positive"/>
+
+            <label for="richter-threshold-negative">Negative:</label>
+            <input type="number" id="richter-threshold-negative"/>
+
+            <label for="richter-threshold-good-tweet-max">Popular Tweet Max Score:</label>
+            <input type="number" id="richter-threshold-good-tweet-max"/>
+
+            <label for="richter-threshold-bad-tweet-max">Controversial Tweet Max Score:</label>
+            <input type="number" id="richter-threshold-bad-tweet-max"/>
+        </div>
+
+        <h3>Balanced Mode</h3>
+
+        <div class="field-grid">
+            <label for="balanced-threshold-positive">Positive:</label>
+            <input type="number" id="balanced-threshold-positive"/>
+    
+            <label for="balanced-threshold-negative">Negative:</label>
+            <input type="number" id="balanced-threshold-negative"/>
+    
+            <label for="balanced-threshold-good-tweet-min">Popular Tweet Min Score:</label>
+            <input type="number" id="balanced-threshold-good-tweet-min"/>
+    
+            <label for="balanced-threshold-bad-tweet-min">Controversial Tweet Min Score:</label>
+            <input type="number" id="balanced-threshold-bad-tweet-min"/>
+        </div>
+
+        <div class="actions">
+            <button id="save">Save</button>
+            <button id="restore">Restore Defaults</button>
+        </div>
+
+        <span id="status" style="display: block; margin-top: 10px"></span>
+
+        <script src="options.js"></script>
+    </body>
+</html>
