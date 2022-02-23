@@ -14,7 +14,8 @@ While the ratio is generally more of a meme / a rule-of-thumb, we actually want 
 
 #### The Ratio Richter (default)
 
-This is a [logarithmic scale designed by "Data for Progress"](https://www.dataforprogress.org/the-ratio-richter-scale) to measure the severity of a tweet and is the closest to a gold standard for measuring "the ratio" there is. It is defined as follows:
+This is a [logarithmic scale designed by "Data for Progress"](https://www.dataforprogress.org/the-ratio-richter-scale) to measure the severity of a tweet and is the closest to a gold standard for measuring "the ratio" there is.
+It is inspired by the Richter scale for measuring earthquake severity and is defined as follows:
 
 `ln(replies / likes) * log(replies)`
 
