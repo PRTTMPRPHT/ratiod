@@ -42,7 +42,7 @@ See [here](https://developer.chrome.com/docs/extensions/mv3/getstarted/#unpacked
 
 ## Settings
 
-There are some settings you can use to tweak the extension's behavior.
+There are some settings you can use to tweak the extension's behavior by heading into the extension options.
 
 ### Calculation Mode
 
@@ -51,6 +51,8 @@ see "Calculation Methods".
 ### Display positive ratios
 
 This extension is configured by default to only highlight exceptionally negative tweets to reduce clutter while browsing Twitter. Usually the ratio is only really interesting when a tweet did badly.
+
+If you are interested in displaying the ratio bar for exceptionally positive tweets as well (as seen in the screenshot above), you can do so by enabling it in the extension options.
 
 ## Contributing
 
