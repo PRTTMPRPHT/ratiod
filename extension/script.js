@@ -47,7 +47,7 @@ let OPTIONS; // Supplied via content script.
 function regexTest(regex, str) {
     regex.lastIndex = 0;
     return regex.test(str);
-};
+}
 
 /**
  * Determines the category/level a given score falls into.
@@ -69,7 +69,7 @@ function determineLevel(score, mode) {
         case score >= OPTIONS.balancedLevelBad: return LEVELS.BAD;
         default: return LEVELS.TERRIBLE;
     }
-};
+}
 
 /**
  * Creates a ratio bar element to append to a tweet.
@@ -118,7 +118,7 @@ function createRatioBar(score, mode) {
     ratioBar.appendChild(scoreText);
 
     return ratioBar;
-};
+}
 
 /**
  * Depending on the mode, calculates if a ratio bar should be applied and applies it if needed.
@@ -168,7 +168,7 @@ function handleFeed(tweets) {
         // Append element if necessary.
         checkAndApplyRatioBar(tweetContent, ratios, OPTIONS.scoring);
     });
-};
+}
 
 /**
  * Calculates the scores from the three key metrics.
@@ -224,7 +224,7 @@ function calculateFeedTweetScores(tweet) {
     }
 
     return makeScores(retweets, likes, replies);
-};
+}
 
 /**
  * Checks the page for all currently unprocessed tweets and applies our changes to it.
