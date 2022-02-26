@@ -235,6 +235,7 @@ function extractNumberFromFormattedText(text) {
     const lang = document.documentElement.lang;
 
     switch (lang) {
+        case "en-GB":
         case "en": return extractNumberFormatEN(baseText);
         case "de": return extractNumberFormatDE(baseText);
         case "sv": return extractNumberFormatSV(baseText);

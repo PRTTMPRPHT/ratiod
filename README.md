@@ -35,6 +35,8 @@ Currently, the following limitations apply:
 - The extension can display the ratio bar only on feed-style tweets, not on, for example, status pages. This is due to a lack of information about the amount of replies on status pages.
 - The extension currently only works correctly if the language is set to one of:
     - English
+      - British
+      - American
     - German
     - Swedish
     - Spanish
