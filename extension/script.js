@@ -11,7 +11,6 @@ const TWEET_CONTENT_SELECTOR = "div:first-child > div:first-child > div:first-ch
 
 // Regular expressions.
 const SINGLE_TWEET_PATTERN = /\/\w{1,15}\/status\/[0-9]+$/g; // URL pattern for single tweet pages.
-const NUMBER_FORMAT_PATTERN = /[,\.]/g; // Pattern used for removal of decimal separators.
 
 // Score modes.
 const BALANCED_MODE = "BALANCED"; // ((retweets - replies) + 2 * (likes - replies)) / 3
@@ -211,19 +210,166 @@ function calculateFeedTweetScores(tweet) {
         return {bailout: true, msg: "Cannot calculate ratios for tweets which are not fully interactive."};
     }
 
-    const replyButtonText = replyButton?.textContent || "0";
-    const likeButtonText = likeButton?.textContent || "0";
-    const retweetButtonText = retweetButton?.textContent || "0";
-    
-    const replies = parseInt(replyButtonText.replace(NUMBER_FORMAT_PATTERN, ""), 10);
-    const likes = parseInt(likeButtonText.replace(NUMBER_FORMAT_PATTERN, ""), 10);
-    const retweets = parseInt(retweetButtonText.replace(NUMBER_FORMAT_PATTERN, ""), 10);
+    const replyButtonText = replyButton?.textContent;
+    const likeButtonText = likeButton?.textContent;
+    const retweetButtonText = retweetButton?.textContent;
+
+    const replies = extractNumberFromFormattedText(replyButtonText);
+    const likes = extractNumberFromFormattedText(likeButtonText);
+    const retweets = extractNumberFromFormattedText(retweetButtonText);
 
     if (isNaN(replies) || isNaN(likes) || isNaN(retweets)) {
         return {bailout: true, msg: "Cannot calculate ratios for tweet due to unparseable text contents."};
     }
 
     return makeScores(retweets, likes, replies);
+}
+
+/**
+ * Extracts a number from twitter-formatted text based on the locale set by the user.
+ * @param text {string} The text to parse.
+ * @return {number} The extracted value.
+ */
+function extractNumberFromFormattedText(text) {
+    const baseText = text || "0";
+    const lang = document.documentElement.lang;
+
+    switch (lang) {
+        case "en": return extractNumberFormatEN(baseText);
+        case "de": return extractNumberFormatDE(baseText);
+        case "sv": return extractNumberFormatSV(baseText);
+        case "es": return extractNumberFormatES(baseText);
+        case "pt": return extractNumberFormatPT(baseText);
+        case "it": return extractNumberFormatIT(baseText);
+        default: {
+            console.error("Ratio'd: Unsupported locale, defaulting to english format. Results will likely not be correct.");
+            return extractNumberFormatEN(baseText);
+        }
+    }
+}
+
+/**
+ * Extracts a twitter-formatted number using the English locale.
+ * @param text {string} The text to parse.
+ * @return {number} The extracted value.
+ */
+function extractNumberFormatEN(text) {
+    text = text.replace(/,/g, "");
+
+    const amplifierMap = {
+        "K": 1000,
+        "M": 1000000
+    };
+
+    const matchResults = /([0-9]+(\.[0-9]+)?)([KM])?/g.exec(text);
+    let num = parseFloat(matchResults[1]);
+    const amplifier = amplifierMap[matchResults[3]];
+    if (amplifier) num *= amplifier;
+
+    return num;
+}
+
+/**
+ * Extracts a twitter-formatted number using the German locale.
+ * @param text {string} The text to parse.
+ * @return {number} The extracted value.
+ */
+function extractNumberFormatDE(text) {
+    text = text.replace(/\./g, "");
+
+    const amplifierMap = {
+        "Mio": 1000000
+    };
+
+    const matchResults = /([0-9]+(,[0-9]+)?)(\s(Mio))?/g.exec(text);
+    let num = parseFloat(matchResults[1].replace(/,/g, "."));
+    const amplifier = amplifierMap[matchResults[4]];
+    if (amplifier) num *= amplifier;
+
+    return num;
+}
+
+/**
+ * Extracts a twitter-formatted number using the Swedish locale.
+ * @param text {string} The text to parse.
+ * @return {number} The extracted value.
+ */
+function extractNumberFormatSV(text) {
+    text = text.replace(/\s/g, "");
+
+    const amplifierMap = {
+        "tn": 1000,
+        "mn": 1000000
+    };
+
+    const matchResults = /([0-9]+(,[0-9]+)?)(tn|mn)?/g.exec(text);
+    let num = parseFloat(matchResults[1].replace(/,/g, "."));
+    const amplifier = amplifierMap[matchResults[3]];
+    if (amplifier) num *= amplifier;
+
+    return num;
+}
+
+/**
+ * Extracts a twitter-formatted number using the Spanish locale.
+ * @param text {string} The text to parse.
+ * @return {number} The extracted value.
+ */
+function extractNumberFormatES(text) {
+    text = text.replace(/\./g, "");
+
+    const amplifierMap = {
+        "mil": 1000,
+        "M": 1000000
+    };
+
+    const matchResults = /([0-9]+(,[0-9]+)?)(\s(mil|M))?/g.exec(text);
+    let num = parseFloat(matchResults[1].replace(/,/g, "."));
+    const amplifier = amplifierMap[matchResults[4]];
+    if (amplifier) num *= amplifier;
+
+    return num;
+}
+
+/**
+ * Extracts a twitter-formatted number using the Portuguese locale.
+ * @param text {string} The text to parse.
+ * @return {number} The extracted value.
+ */
+function extractNumberFormatPT(text) {
+    text = text.replace(/\./g, "");
+
+    const amplifierMap = {
+        "mil": 1000,
+        "mi": 1000000
+    };
+
+    const matchResults = /([0-9]+(,[0-9]+)?)(\s(mil|mi))?/g.exec(text);
+    let num = parseFloat(matchResults[1].replace(/,/g, "."));
+    const amplifier = amplifierMap[matchResults[4]];
+    if (amplifier) num *= amplifier;
+
+    return num;
+}
+
+/**
+ * Extracts a twitter-formatted number using the Italian locale.
+ * @param text {string} The text to parse.
+ * @return {number} The extracted value.
+ */
+function extractNumberFormatIT(text) {
+    text = text.replace(/\./g, "");
+
+    const amplifierMap = {
+        "Mln": 1000000
+    };
+
+    const matchResults = /([0-9]+(,[0-9]+)?)(\s(Mln))?/g.exec(text);
+    let num = parseFloat(matchResults[1].replace(/,/g, "."));
+    const amplifier = amplifierMap[matchResults[4]];
+    if (amplifier) num *= amplifier;
+
+    return num;
 }
 
 /**
@@ -243,16 +389,16 @@ function performCheck() {
     if (regexTest(SINGLE_TWEET_PATTERN, pathname)) {
         // Main tweet is identified by a contained link to the current url.
         const mainTweet = availableTweets.find(tweet => {
-            return tweet.querySelectorAll(`a[href="${pathname}"]`).length != 0;
+            return tweet.querySelectorAll(`a[href="${pathname}"]`).length !== 0;
         });
 
-        const otherTweets = availableTweets.filter(t => t != mainTweet);
+        const otherTweets = availableTweets.filter(t => t !== mainTweet);
         
         handleFeed(otherTweets);
     } else {
         handleFeed(availableTweets);
     }
-};
+}
 
 // Bootstrap.
 if (!document.body.hasAttribute(ATTR_SETTINGS)) {

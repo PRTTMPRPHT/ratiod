@@ -30,7 +30,16 @@ Unlike the Ratio Richter, this takes into account the retweets a tweet has. It a
 
 ## Limitations
 
-Currently, the extension can display the ratio bar only on feed-style tweets, not on, for example, status pages. This is due to a lack of information about the amount of replies on status pages.
+Currently, the following limitations apply:
+
+- The extension can display the ratio bar only on feed-style tweets, not on, for example, status pages. This is due to a lack of information about the amount of replies on status pages.
+- The extension currently only works correctly if the language is set to one of:
+    - English
+    - German
+    - Swedish
+    - Spanish
+    - Portuguese
+    - Italian
 
 ## Installing
 
