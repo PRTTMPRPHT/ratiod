@@ -45,7 +45,12 @@ Currently, the following limitations apply:
 
 ## Installing
 
-Currently, this extension can only be loaded in unpacked mode, as it is not yet available on any web store.
+This extension can be installed in multiple ways.
+
+### Chrome Web Store (preferred)
+
+You can easily add Ratio'd to your browser from the Chrome Web Store!
+https://chrome.google.com/webstore/detail/ratiod/kmcheccfkipimiamcgdbjoemdoobiaim
 
 ### Unpacked
 
