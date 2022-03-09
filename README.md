@@ -42,6 +42,7 @@ Currently, the following limitations apply:
     - Spanish
     - Portuguese
     - Italian
+    - Ukrainian
 
 ## Installing
 
@@ -72,7 +73,7 @@ If you are interested in displaying the ratio bar for exceptionally positive twe
 
 ## Contributing
 
-By contributing, you agree that your contributions will be licensed under its [MIT License](https://github.com/PRTTMPRPHT/ratiod/blob/master/LICENSE).
+By contributing, you agree that your contributions will be licensed under the project's [MIT License](https://github.com/PRTTMPRPHT/ratiod/blob/master/LICENSE).
 
 ## Further legalese
 TWITTER, TWEET, RETWEET and the  Twitter Bird logo are trademarks of  Twitter Inc. or its affiliates.

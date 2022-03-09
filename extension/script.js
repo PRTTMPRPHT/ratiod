@@ -242,6 +242,7 @@ function extractNumberFromFormattedText(text) {
         case "es": return extractNumberFormatES(baseText);
         case "pt": return extractNumberFormatPT(baseText);
         case "it": return extractNumberFormatIT(baseText);
+        case "uk": return extractNumberFormatUKR(baseText);
         default: {
             console.error("Ratio'd: Unsupported locale, defaulting to english format. Results will likely not be correct.");
             return extractNumberFormatEN(baseText);
@@ -368,6 +369,27 @@ function extractNumberFormatIT(text) {
     const matchResults = /([0-9]+(,[0-9]+)?)(\s(Mln))?/g.exec(text);
     let num = parseFloat(matchResults[1].replace(/,/g, "."));
     const amplifier = amplifierMap[matchResults[4]];
+    if (amplifier) num *= amplifier;
+
+    return num;
+}
+
+/**
+ * Extracts a twitter-formatted number using the Ukrainian locale.
+ * @param text {string} The text to parse.
+ * @return {number} The extracted value.
+ */
+function extractNumberFormatUKR(text) {
+    text = text.replace(/[\.\s]/g, "");
+
+    const amplifierMap = {
+        "тис": 1000,
+        "млн": 1000000
+    };
+
+    const matchResults = /([0-9]+(,[0-9]+)?)(тис|млн)?/g.exec(text);
+    let num = parseFloat(matchResults[1].replace(/,/g, "."));
+    const amplifier = amplifierMap[matchResults[3]];
     if (amplifier) num *= amplifier;
 
     return num;
