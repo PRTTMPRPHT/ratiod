@@ -237,12 +237,13 @@ function extractNumberFromFormattedText(text) {
     switch (lang) {
         case "en-GB":
         case "en": return extractNumberFormatEN(baseText);
-        case "de": return extractNumberFormatDE(baseText);
-        case "sv": return extractNumberFormatSV(baseText);
-        case "es": return extractNumberFormatES(baseText);
-        case "pt": return extractNumberFormatPT(baseText);
-        case "it": return extractNumberFormatIT(baseText);
-        case "uk": return extractNumberFormatUKR(baseText);
+        case "de": return extractNumberFormatGeneral(baseText, [null, "Mio"]);
+        case "sv": return extractNumberFormatGeneral(baseText, ["tn", "mn"]);
+        case "es": return extractNumberFormatGeneral(baseText, ["mil", "M"]);
+        case "pt": return extractNumberFormatGeneral(baseText, ["mil", "mi"]);
+        case "it": return extractNumberFormatGeneral(baseText, [null, "Mln"]);
+        case "uk": return extractNumberFormatGeneral(baseText, ["тис", "млн"]);
+        case "fr": return extractNumberFormatGeneral(baseText, ["k", "M"]);
         default: {
             console.error("Ratio'd: Unsupported locale, defaulting to english format. Results will likely not be correct.");
             return extractNumberFormatEN(baseText);
@@ -272,122 +273,22 @@ function extractNumberFormatEN(text) {
 }
 
 /**
- * Extracts a twitter-formatted number using the German locale.
- * @param text {string} The text to parse.
+ * Extracts a twitter-formatted number from any locale that does not use a dot as the decimal separator.
+ * @param text {string} The text to parse
+ * @param amplifiers {[number | null, number | null]} Amplifier strings used for abbreviated numbers.
  * @return {number} The extracted value.
  */
-function extractNumberFormatDE(text) {
-    text = text.replace(/\./g, "");
-
-    const amplifierMap = {
-        "Mio": 1000000
-    };
-
-    const matchResults = /([0-9]+(,[0-9]+)?)(\s(Mio))?/g.exec(text);
-    let num = parseFloat(matchResults[1].replace(/,/g, "."));
-    const amplifier = amplifierMap[matchResults[4]];
-    if (amplifier) num *= amplifier;
-
-    return num;
-}
-
-/**
- * Extracts a twitter-formatted number using the Swedish locale.
- * @param text {string} The text to parse.
- * @return {number} The extracted value.
- */
-function extractNumberFormatSV(text) {
-    text = text.replace(/\s/g, "");
-
-    const amplifierMap = {
-        "tn": 1000,
-        "mn": 1000000
-    };
-
-    const matchResults = /([0-9]+(,[0-9]+)?)(tn|mn)?/g.exec(text);
-    let num = parseFloat(matchResults[1].replace(/,/g, "."));
-    const amplifier = amplifierMap[matchResults[3]];
-    if (amplifier) num *= amplifier;
-
-    return num;
-}
-
-/**
- * Extracts a twitter-formatted number using the Spanish locale.
- * @param text {string} The text to parse.
- * @return {number} The extracted value.
- */
-function extractNumberFormatES(text) {
-    text = text.replace(/\./g, "");
-
-    const amplifierMap = {
-        "mil": 1000,
-        "M": 1000000
-    };
-
-    const matchResults = /([0-9]+(,[0-9]+)?)(\s(mil|M))?/g.exec(text);
-    let num = parseFloat(matchResults[1].replace(/,/g, "."));
-    const amplifier = amplifierMap[matchResults[4]];
-    if (amplifier) num *= amplifier;
-
-    return num;
-}
-
-/**
- * Extracts a twitter-formatted number using the Portuguese locale.
- * @param text {string} The text to parse.
- * @return {number} The extracted value.
- */
-function extractNumberFormatPT(text) {
-    text = text.replace(/\./g, "");
-
-    const amplifierMap = {
-        "mil": 1000,
-        "mi": 1000000
-    };
-
-    const matchResults = /([0-9]+(,[0-9]+)?)(\s(mil|mi))?/g.exec(text);
-    let num = parseFloat(matchResults[1].replace(/,/g, "."));
-    const amplifier = amplifierMap[matchResults[4]];
-    if (amplifier) num *= amplifier;
-
-    return num;
-}
-
-/**
- * Extracts a twitter-formatted number using the Italian locale.
- * @param text {string} The text to parse.
- * @return {number} The extracted value.
- */
-function extractNumberFormatIT(text) {
-    text = text.replace(/\./g, "");
-
-    const amplifierMap = {
-        "Mln": 1000000
-    };
-
-    const matchResults = /([0-9]+(,[0-9]+)?)(\s(Mln))?/g.exec(text);
-    let num = parseFloat(matchResults[1].replace(/,/g, "."));
-    const amplifier = amplifierMap[matchResults[4]];
-    if (amplifier) num *= amplifier;
-
-    return num;
-}
-
-/**
- * Extracts a twitter-formatted number using the Ukrainian locale.
- * @param text {string} The text to parse.
- * @return {number} The extracted value.
- */
-function extractNumberFormatUKR(text) {
+function extractNumberFormatGeneral(text, amplifiers) {
     text = text.replace(/[\.\s]/g, "");
 
     const amplifierMap = {
-        "тис": 1000,
-        "млн": 1000000
+        [amplifiers[0]]: 1000,
+        [amplifiers[1]]: 1000000
     };
 
-    const matchResults = /([0-9]+(,[0-9]+)?)(тис|млн)?/g.exec(text);
+    const amplifiersString = amplifiers.filter(el => !!el).join("|");
+    const matchResults = new RegExp(`([0-9]+(,[0-9]+)?)(${amplifiersString})?`, "g")
+        .exec(text);
     let num = parseFloat(matchResults[1].replace(/,/g, "."));
     const amplifier = amplifierMap[matchResults[3]];
     if (amplifier) num *= amplifier;

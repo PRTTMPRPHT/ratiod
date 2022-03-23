@@ -43,6 +43,7 @@ Currently, the following limitations apply:
     - Portuguese
     - Italian
     - Ukrainian
+    - French
 
 ## Installing
 
