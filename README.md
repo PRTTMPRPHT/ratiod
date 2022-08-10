@@ -44,6 +44,7 @@ Currently, the following limitations apply:
     - Italian
     - Ukrainian
     - French
+    - Dutch
 
 ## Installing
 

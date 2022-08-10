@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Ratio'd",
     "description": "Google Chrome extension which highlights tweets that got badly \"Ratio'd\".",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "author": "@PRTTMPRPHT",
     "permissions": [
       "storage"

@@ -238,6 +238,7 @@ function extractNumberFromFormattedText(text) {
         case "en-GB":
         case "en": return extractNumberFormatEN(baseText);
         case "de": return extractNumberFormatGeneral(baseText, [null, "Mio"]);
+        case "nl": return extractNumberFormatGeneral(baseText, ["K", "mln"]);
         case "sv": return extractNumberFormatGeneral(baseText, ["tn", "mn"]);
         case "es": return extractNumberFormatGeneral(baseText, ["mil", "M"]);
         case "pt": return extractNumberFormatGeneral(baseText, ["mil", "mi"]);
