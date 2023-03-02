@@ -7,7 +7,7 @@ const TWEET_SELECTOR = `article[data-testid="tweet"]:not([${ATTR_TOUCHED}="true"
 const FEED_TWEET_REPLY_SELECTOR = `[data-testid="reply"] span > span > span`; // Reply button.
 const FEED_TWEET_RETWEET_SELECTOR = `[data-testid="retweet"] span > span > span, [data-testid="unretweet"] span > span > span`; // Retweet button.
 const FEED_TWEET_LIKE_SELECTOR = `[data-testid="like"] span > span > span, [data-testid="unlike"] span > span > span`; // Like button.
-const TWEET_CONTENT_SELECTOR = "article > div:first-child > div:first-child > div:nth-child(2) > div:nth-child(2) > div:nth-child(2)"; // Sub-element of feed tweets that is nicely aligned.
+const TWEET_CONTENT_SELECTOR = "article > div:first-child > div:first-child > div:nth-child(2) > div:nth-child(2) > div:last-child"; // Sub-element of feed tweets that is nicely aligned.
 
 // Regular expressions.
 const SINGLE_TWEET_PATTERN = /\/\w{1,15}\/status\/[0-9]+$/g; // URL pattern for single tweet pages.
